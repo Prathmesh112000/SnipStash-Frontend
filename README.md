@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+🚀 SnipStash — Your Smart Snippet Organizer
+Developers constantly copy snippets from StackOverflow, blog posts, or personal projects — but rarely organize them. They end up scattered across sticky notes, Notion docs, or random VS Code files… or worse, forgotten entirely.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SnipStash is a smart snippet organizer that lets developers quickly save, auto-tag, search, and manage reusable code snippets across multiple programming languages.
 
-## Available Scripts
+🎯 Objective
+Build a fullstack web application where authenticated users can:
 
-In the project directory, you can run:
+💾 Save reusable code snippets in various languages
 
-### `npm start`
+🧠 Auto-categorize snippets based on patterns (no AI — just rule-based logic)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🏷️ Tag and group snippets manually
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🔍 Search and filter snippets by tag, language, or keywords
 
-### `npm test`
+📋 Quickly copy to clipboard for re-use
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+👤 User Roles
+User (authenticated)
+Each user has a private snippet vault — no public sharing needed for the MVP.
 
-### `npm run build`
+🔐 Authentication & Authorization
+Secure email/password login/signup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+All snippets and tags are user-scoped (only accessible to the owner)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Protected routes and access control for snippet operations
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🔧 Core Features
+1. Save a Snippet
+Form fields:
 
-### `npm run eject`
+Snippet title
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Snippet code (multiline textarea with syntax highlighting)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Language dropdown (e.g., JavaScript, Python, Bash, etc.)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Optional: Tags and description
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+On submit: 🔍 "Smart Categorize" auto-generates relevant tags
 
-## Learn More
+2. Auto-Tagging Logic (Rule-based)
+SnipStash analyzes submitted code snippets using pattern-matching:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Pattern	Tag
+for, while	loop
+fetch, axios, XMLHttpRequest	api
+try, catch	error handling
+.map, .filter()	array ops
+console.log	debugging
+Tags are editable by users later.
 
-### Code Splitting
+3. My Snippet Library
+Display and manage saved snippets:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+📁 Filter by:
 
-### Analyzing the Bundle Size
+Language
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Tag
 
-### Making a Progressive Web App
+Keyword (in title or code body)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+🧾 Snippet preview:
 
-### Advanced Configuration
+Title
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+First few lines
 
-### Deployment
+Language badge
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Tags
 
-### `npm run build` fails to minify
+📋 "Copy" to clipboard button
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🛠️ Tech Stack (suggested)
+Frontend: React / Vue / Angular + TailwindCSS or similar
+
+Backend: Node.js + Express
+
+Database: MongoDB / PostgreSQL
+
+Auth: JWT or Auth0 / Firebase Auth
+
+Code Highlighting: Prism.js / Highlight.js
+
+🚧 MVP Scope
+✅ Auth system
+
+✅ Save / edit / delete snippets
+
+✅ Smart auto-tagging
+
+✅ Search, filter, and copy
+
+🚫 No snippet sharing for MVP
+
+📄 License
+MIT License.
+Built for devs, by devs.
