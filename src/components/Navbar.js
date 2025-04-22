@@ -14,9 +14,10 @@ import {
   Avatar,
   Text,
   HStack,
+  MenuDivider,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
-import { FiMenu, FiUser, FiCode } from 'react-icons/fi';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { FiMenu, FiUser, FiCode, FiFileText, FiBookmark } from 'react-icons/fi';
 // import LanguageIcon from './LanguageIcon';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,6 +25,10 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const location = useLocation();
+
+  const isBlogsPage = location.pathname.includes('/blogs');
+  const isSnippetsPage = location.pathname.includes('/snippets');
 
   return (
     <Box
@@ -62,15 +67,46 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <Flex align="center" gap={4}>
+            <Menu>
+              <MenuButton
+                as={Button}
+                leftIcon={<FiBookmark />}
+                colorScheme="brand"
+                variant="outline"
+                size="sm"
+              >
+                {isBlogsPage ? 'Blogs' : isSnippetsPage ? 'Snippets' : 'Content'}
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={RouterLink}
+                  to="/"
+                  icon={<FiCode />}
+                  color={!isBlogsPage && !isSnippetsPage ? 'brand.500' : undefined}
+                >
+                  Snippets
+                </MenuItem>
+                <MenuItem
+                  as={RouterLink}
+                  to="/blogs"
+                  icon={<FiFileText />}
+                  color={isBlogsPage ? 'brand.500' : undefined}
+                >
+                  Blogs
+                </MenuItem>
+              </MenuList>
+            </Menu>
+
             <Button
               as={RouterLink}
-              to="/snippets/new"
+              to={isBlogsPage ? "/blog/new" : "/snippets/new"}
               colorScheme="brand"
               size="sm"
-              leftIcon={<FiCode />}
+              leftIcon={isBlogsPage ? <FiFileText /> : <FiCode />}
             >
-              New Snippet
+              New {isBlogsPage ? 'Blog' : 'Snippet'}
             </Button>
+
             <Menu>
               <MenuButton
                 as={IconButton}
@@ -83,6 +119,7 @@ const Navbar = () => {
                 <MenuItem as={RouterLink} to="/profile">
                   Profile
                 </MenuItem>
+                <MenuDivider />
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </MenuList>
             </Menu>

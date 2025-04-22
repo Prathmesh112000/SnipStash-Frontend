@@ -46,6 +46,25 @@ const snippetsAPI = {
   delete: (id) => api.delete(`/snippets/${id}`),
 };
 
-export { snippetsAPI, authAPI };
+// Blogs API calls
+const blogsAPI = {
+  getAll: async (filters = {}) => {
+    const { category, search } = filters;
+    const params = new URLSearchParams();
+    
+    if (category) params.append('category', category);
+    if (search) params.append('search', search);
+    
+    const response = await api.get(`/blogs?${params.toString()}`);
+    return response.data;
+  },
+  getById: (id) => api.get(`/blogs/${id}`).then(response => response.data),
+  create: (data) => api.post('/blogs', data).then(response => response.data),
+  update: (id, data) => api.put(`/blogs/${id}`, data).then(response => response.data),
+  delete: (id) => api.delete(`/blogs/${id}`).then(response => response.data),
+  toggleRead: (id) => api.put(`/blogs/${id}/toggle-read`).then(response => response.data),
+};
+
+export { snippetsAPI, authAPI, blogsAPI };
 
 export default api; 

@@ -8,6 +8,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateSnippet from './pages/CreateSnippet';
 import SnippetDetail from './pages/SnippetDetail';
+import CreateBlog from './pages/CreateBlog';
+import BlogList from './pages/BlogList';
+import BlogDetail from './pages/BlogDetail';
+import EditBlog from './pages/EditBlog';
 import theme from './theme';
 
 // Protected Route component
@@ -76,6 +80,38 @@ const AppContent = () => {
               element={
                 <ProtectedRoute>
                   <SnippetDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blogs"
+              element={
+                <ProtectedRoute>
+                  <BlogList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blog/new"
+              element={
+                <ProtectedRoute>
+                  <CreateBlog />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blog/:id"
+              element={
+                <ProtectedRoute>
+                  <BlogDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blog/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditBlog />
                 </ProtectedRoute>
               }
             />

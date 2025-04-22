@@ -223,17 +223,17 @@ const Dashboard = () => {
   return (
     <Container maxW="1200px" py={8}>
       <VStack spacing={8} align="stretch">
-        <HStack justify="space-between">
-          <Heading>My Snippets</Heading>
-          <Button
+        {/* <HStack justify="space-between"> */}
+          {/* <Heading>My Snippets</Heading> */}
+          {/* <Button
             as={RouterLink}
             to="/snippets/new"
             leftIcon={<Icon as={FiPlus} />}
             colorScheme="brand"
           >
             New Snippet
-          </Button>
-        </HStack>
+          </Button> */}
+        {/* </HStack> */}
 
         <HStack spacing={4}>
           <Box flex="1">

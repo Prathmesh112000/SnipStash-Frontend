@@ -36,6 +36,7 @@ import { FiCopy, FiEdit2, FiTrash2, FiSave, FiX, FiPlus } from 'react-icons/fi';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { snippetsAPI } from '../services/api';
+import { getLanguageIcon, getLanguageColor } from '../utils/languageIcons';
 
 const SnippetDetail = () => {
   const { id } = useParams();
@@ -53,6 +54,7 @@ const SnippetDetail = () => {
   // Move all useColorModeValue hooks to the top
   const bgColor = useColorModeValue('gray.50', 'gray.700');
   const codeBgColor = useColorModeValue('gray.50', 'gray.700');
+  const headerBgColor = useColorModeValue('gray.50', 'gray.700');
 
   useEffect(() => {
     const fetchSnippet = async () => {
@@ -220,30 +222,72 @@ const SnippetDetail = () => {
 
         {isEditing ? (
           <VStack spacing={4} align="stretch">
-            <Textarea
-              value={editedSnippet.code}
-              onChange={(e) =>
-                setEditedSnippet({ ...editedSnippet, code: e.target.value })
-              }
-              fontFamily="mono"
-              minH="400px"
-              p={4}
-              borderRadius="md"
-              bg={bgColor}
-            />
-            <Select
-              value={editedSnippet.language}
-              onChange={(e) =>
-                setEditedSnippet({ ...editedSnippet, language: e.target.value })
-              }
-              maxW="200px"
-            >
-              <option value="javascript">JavaScript</option>
-              <option value="python">Python</option>
-              <option value="java">Java</option>
-              <option value="cpp">C++</option>
-            </Select>
-            
+            <Box>
+              <Text mb={2}>Code</Text>
+              <Box
+                position="relative"
+                borderWidth="1px"
+                borderRadius="md"
+                overflow="hidden"
+              >
+                <Textarea
+                  value={editedSnippet.code}
+                  onChange={(e) =>
+                    setEditedSnippet({ ...editedSnippet, code: e.target.value })
+                  }
+                  fontFamily="mono"
+                  minH="400px"
+                  p={4}
+                  borderRadius="md"
+                  bg={bgColor}
+                  resize="vertical"
+                />
+                <Box
+                  position="absolute"
+                  top={2}
+                  right={2}
+                  bg={bgColor}
+                  p={2}
+                  rounded="md"
+                  shadow="sm"
+                  maxW="50%"
+                  overflow="auto"
+                >
+                  <SyntaxHighlighter
+                    language={editedSnippet.language}
+                    style={tomorrow}
+                    customStyle={{
+                      margin: 0,
+                      background: 'transparent',
+                      fontSize: '14px',
+                    }}
+                  >
+                    {editedSnippet.code}
+                  </SyntaxHighlighter>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box>
+              <Text mb={2}>Language</Text>
+              <Select
+                value={editedSnippet.language}
+                onChange={(e) =>
+                  setEditedSnippet({ ...editedSnippet, language: e.target.value })
+                }
+                maxW="200px"
+              >
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="php">PHP</option>
+                <option value="ruby">Ruby</option>
+              </Select>
+            </Box>
+
             <Box>
               <Text mb={2}>Tags</Text>
               <Wrap spacing={2} mb={4}>
@@ -286,22 +330,30 @@ const SnippetDetail = () => {
           </VStack>
         ) : (
           <Box
-            p={4}
+            borderWidth="1px"
             borderRadius="md"
+            overflow="hidden"
             bg={codeBgColor}
-            overflowX="auto"
           >
-            <SyntaxHighlighter
-              language={snippet.language}
-              style={tomorrow}
-              customStyle={{
-                margin: 0,
-                padding: 0,
-                background: 'transparent',
-              }}
-            >
-              {snippet.code}
-            </SyntaxHighlighter>
+            <Box p={4} bg={headerBgColor}>
+              <HStack spacing={2}>
+                <Icon as={getLanguageIcon(snippet.language)} color={getLanguageColor(snippet.language)} />
+                <Text fontWeight="medium">{snippet.language}</Text>
+              </HStack>
+            </Box>
+            <Box p={4} overflowX="auto">
+              <SyntaxHighlighter
+                language={snippet.language}
+                style={tomorrow}
+                customStyle={{
+                  margin: 0,
+                  padding: 0,
+                  background: 'transparent',
+                }}
+              >
+                {snippet.code}
+              </SyntaxHighlighter>
+            </Box>
           </Box>
         )}
 

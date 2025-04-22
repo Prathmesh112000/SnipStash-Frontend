@@ -17,11 +17,14 @@ import {
   TagLabel,
   TagCloseButton,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
   Icon,
   Text,
   Wrap,
   WrapItem,
+  Grid,
+  GridItem,
+  IconButton,
 } from '@chakra-ui/react';
 import { useColorMode } from '@chakra-ui/color-mode';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -29,6 +32,7 @@ import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { FiHash, FiPlus, FiTag } from 'react-icons/fi';
 import { snippetsAPI } from '../services/api';
 import { generateSmartTags, getTagColor } from '../utils/smartTags';
+import CodePreview from '../components/CodePreview';
 
 const autoTagPatterns = {
   // Loop patterns (multi-language)
@@ -190,6 +194,7 @@ const CreateSnippet = () => {
   const [autoTags, setAutoTags] = useState([]);
   const [description, setDescription] = useState('');
   const [autoDescription, setAutoDescription] = useState('');
+  const [newTag, setNewTag] = useState('');
 
   const bgColor = colorMode === 'light' ? 'white' : 'gray.800';
   const textColor = colorMode === 'light' ? 'gray.800' : 'white';
@@ -315,7 +320,7 @@ const CreateSnippet = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       toast({
         title: 'Error creating snippet',
@@ -339,130 +344,146 @@ const CreateSnippet = () => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  const handleAddTag = () => {
+    if (newTag && !tags.includes(newTag)) {
+      setTags([...tags, newTag]);
+      setNewTag('');
+    }
+  };
+
   return (
-    <Container maxW="800px" py={8}>
+    <Container maxW="1400px" py={8}>
       <VStack spacing={8} align="stretch">
         <Heading>Create New Snippet</Heading>
 
         <Box as="form" onSubmit={handleSubmit}>
-          <VStack spacing={6}>
-            <FormControl isRequired>
-              <FormLabel>Title</FormLabel>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter snippet title"
-              />
-            </FormControl>
+          <Grid templateColumns="repeat(2, 1fr)" gap={8}>
+            <GridItem>
+              <VStack spacing={6} align="stretch">
+                <FormControl isRequired>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Enter snippet title"
+                  />
+                </FormControl>
 
-            <FormControl isRequired>
-              <FormLabel>Language</FormLabel>
-              <Select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-                <option value="cpp">C++</option>
-                <option value="html">HTML</option>
-                <option value="css">CSS</option>
-                <option value="php">PHP</option>
-                <option value="ruby">Ruby</option>
-              </Select>
-            </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel>Code</FormLabel>
-              <Box position="relative">
-                <Textarea
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="Enter your code here"
-                  fontFamily="mono"
-                  minH="300px"
-                  resize="vertical"
-                />
-                <Box
-                  position="absolute"
-                  top={2}
-                  right={2}
-                  bg={bgColor}
-                  p={2}
-                  rounded="md"
-                  shadow="sm"
-                >
-                  <SyntaxHighlighter
-                    language={language}
-                    style={tomorrow}
-                    customStyle={{
-                      margin: 0,
-                      background: 'transparent',
-                      fontSize: '14px',
-                    }}
+                <FormControl isRequired>
+                  <FormLabel>Language</FormLabel>
+                  <Select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
                   >
-                    {code}
-                  </SyntaxHighlighter>
-                </Box>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="php">PHP</option>
+                    <option value="ruby">Ruby</option>
+                  </Select>
+                </FormControl>
+
+                <FormControl isRequired>
+                  <FormLabel>Code</FormLabel>
+                  <Textarea
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="Enter your code here"
+                    fontFamily="mono"
+                    minH="400px"
+                    resize="vertical"
+                  />
+                </FormControl>
+
+                <FormControl>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder={autoDescription || "Enter snippet description"}
+                    minH="100px"
+                  />
+                  {autoDescription && !description && (
+                    <Text fontSize="sm" color="gray.500" mt={2}>
+                      Auto-generated description based on code analysis
+                    </Text>
+                  )}
+                </FormControl>
+
+                <FormControl>
+                  <FormLabel>Tags</FormLabel>
+                  <Wrap spacing={2}>
+                    {tags.map((tag) => (
+                      <WrapItem key={tag}>
+                        <Tag
+                          size="md"
+                          borderRadius="full"
+                          variant="solid"
+                          colorScheme={getTagColor(tag)}
+                        >
+                          <TagLabel>{tag}</TagLabel>
+                          <TagCloseButton onClick={() => handleTagRemove(tag)} />
+                        </Tag>
+                      </WrapItem>
+                    ))}
+                    {smartTags.map((tag) => (
+                      <WrapItem key={tag}>
+                        <Tag
+                          size="md"
+                          borderRadius="full"
+                          variant="subtle"
+                          colorScheme={getTagColor(tag)}
+                        >
+                          <TagLabel>{tag}</TagLabel>
+                        </Tag>
+                      </WrapItem>
+                    ))}
+                  </Wrap>
+                  <InputGroup size="md" mt={4}>
+                    <Input
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      placeholder="Add new tag"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddTag();
+                        }
+                      }}
+                    />
+                    <InputRightElement>
+                      <IconButton
+                        size="sm"
+                        icon={<Icon as={FiPlus} />}
+                        onClick={handleAddTag}
+                        aria-label="Add tag"
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+
+                <Button
+                  type="submit"
+                  colorScheme="brand"
+                  size="lg"
+                  width="full"
+                  isLoading={isLoading}
+                >
+                  Save Snippet
+                </Button>
+              </VStack>
+            </GridItem>
+
+            <GridItem>
+              <Box h="100%">
+                <Text mb={2} fontWeight="medium">Preview</Text>
+                <CodePreview code={code} language={language} />
               </Box>
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder={autoDescription || "Enter snippet description"}
-                minH="100px"
-              />
-              {autoDescription && !description && (
-                <Text fontSize="sm" color="gray.500" mt={2}>
-                  Auto-generated description based on code analysis
-                </Text>
-              )}
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Tags</FormLabel>
-              <Wrap spacing={2}>
-                {tags.map((tag) => (
-                  <WrapItem key={tag}>
-                    <Tag
-                      size="md"
-                      borderRadius="full"
-                      variant="solid"
-                      colorScheme={getTagColor(tag)}
-                    >
-                      <TagLabel>{tag}</TagLabel>
-                      <TagCloseButton onClick={() => handleTagRemove(tag)} />
-                    </Tag>
-                  </WrapItem>
-                ))}
-                {smartTags.map((tag) => (
-                  <WrapItem key={tag}>
-                    <Tag
-                      size="md"
-                      borderRadius="full"
-                      variant="subtle"
-                      colorScheme={getTagColor(tag)}
-                    >
-                      <TagLabel>{tag}</TagLabel>
-                    </Tag>
-                  </WrapItem>
-                ))}
-              </Wrap>
-            </FormControl>
-
-            <Button
-              type="submit"
-              colorScheme="brand"
-              size="lg"
-              width="full"
-              isLoading={isLoading}
-            >
-              Save Snippet
-            </Button>
-          </VStack>
+            </GridItem>
+          </Grid>
         </Box>
       </VStack>
     </Container>
