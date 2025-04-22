@@ -116,9 +116,11 @@ const Navbar = () => {
                 aria-label="User menu"
               />
               <MenuList>
+                {/* Profile option removed
                 <MenuItem as={RouterLink} to="/profile">
                   Profile
                 </MenuItem>
+                */}
                 <MenuDivider />
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </MenuList>
@@ -134,6 +136,7 @@ const Navbar = () => {
             >
               Login
             </Button>
+            {/* Register button removed
             <Button
               as={RouterLink}
               to="/register"
@@ -142,6 +145,7 @@ const Navbar = () => {
             >
               Register
             </Button>
+            */}
           </Flex>
         )}
       </Flex>

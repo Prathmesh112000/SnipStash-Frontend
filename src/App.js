@@ -5,7 +5,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import Register from './pages/Register';
 import CreateSnippet from './pages/CreateSnippet';
 import SnippetDetail from './pages/SnippetDetail';
 import CreateBlog from './pages/CreateBlog';
@@ -120,14 +119,6 @@ const AppContent = () => {
               element={
                 <PublicRoute>
                   <Login />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <PublicRoute>
-                  <Register />
                 </PublicRoute>
               }
             />

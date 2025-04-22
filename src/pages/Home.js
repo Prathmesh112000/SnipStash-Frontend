@@ -54,7 +54,7 @@ const Home = () => {
             </Text>
             <Button
               as={RouterLink}
-              to="/register"
+              to="/login"
               size="lg"
               colorScheme="brand"
               px={8}
